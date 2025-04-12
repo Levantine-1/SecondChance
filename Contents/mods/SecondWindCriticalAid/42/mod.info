@@ -1,0 +1,6 @@
+name=Second Wind: Critical Aid
+poster=poster.png
+id=SecondWindCriticalAid
+description=Gives you a chance to survive bites and other infection depending on timely and skillful medical treatment.
+url=https://levantine.io
+lua=client

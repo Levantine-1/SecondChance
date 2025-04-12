@@ -1,0 +1,5 @@
+version=1
+title=Second Wind Critical Aid
+description=Gives you a chance to survive bites and other infection depending on timely and skillful medical treatment.
+tags=
+visibility=public
