@@ -8,6 +8,15 @@ local function LoadPlayerData()
 end
 Events.OnGameStart.Add(LoadPlayerData)
 
+local function ResetInfectionData()
+    if player then
+        player = getPlayer() -- Reinitialize player variable
+        modData.ICdata.infectionStartedTime = nil
+        print("Infection data reset for new character.")
+    end
+end
+Events.OnCreatePlayer.Add(ResetInfectionData) -- Reset infection data when a new character is created in the event of a respawn
+
 
 local function CheckForInfection()
     if player:getBodyDamage():IsInfected() and modData.ICdata.infectionStartedTime ~= nil then
