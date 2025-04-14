@@ -33,6 +33,59 @@ local function CheckForInfection()
     end
 end
 
+local function calculateBonusSavingThrow() -- Calculate the player's bonus saving throw based on their occupation and traits and first aid skill
+    local bonusSavingThrow = 0
+
+    -- ---------------------- Saving Throw From Occupation ----------------------
+    local occupation = player:getDescriptor():getProfession()
+    if occupation == "doctor" then
+        savbonusSavingThrowingThrow = bonusSavingThrow + 5
+        -- print("Occupation: Doctor - Saving Throw: " .. bonusSavingThrow)
+    end
+    if occupation == "nurse" then
+        bonusSavingThrow = bonusSavingThrow + 2
+        -- print("Occupation: Nurse - Saving Throw: " .. bonusSavingThrow)
+    end
+    local relatedOccupations = {"policeofficer", "fireofficer", "parkranger", "veteran", "securityguard"}
+    for _, relatedOccupation in ipairs(relatedOccupations) do
+        if occupation == relatedOccupation then
+            bonusSavingThrow = bonusSavingThrow + 1
+            -- print("Occupation: " .. relatedOccupation .. " - Saving Throw: " .. bonusSavingThrow)
+        end
+    end
+
+    -- ---------------------- Saving Throw From Traits ----------------------
+    local relatedTraits = {"FirstAid", "FastHealer", "Resilient", "ThickSkinned", "Dextrous", "Strong", "Athletic", "Outdoorsman", "Lucky"}
+    local traits = player:getTraits()
+    maxSavingThrowFromTraits = 3
+    savingThrowFromTraits = 0
+    for i = 0, traits:size() - 1 do
+        for _, relatedTrait in ipairs(relatedTraits) do
+            if traits:get(i) == relatedTrait then
+                savingThrowFromTraits = savingThrowFromTraits + 1
+                -- print("Trait: " .. relatedTrait .. " adds 1 Saving Throw for a MAX of: " .. maxSavingThrowFromTraits)
+            end
+        end
+    end
+    if savingThrowFromTraits > maxSavingThrowFromTraits then
+        bonusSavingThrow = bonusSavingThrow + maxSavingThrowFromTraits
+        -- print("Saving Throw from Traits: " .. maxSavingThrowFromTraits .. " Total Bonus Saving Throw: " .. bonusSavingThrow)
+    else
+        bonusSavingThrow = bonusSavingThrow + savingThrowFromTraits
+        -- print("Saving Throw from Traits: " .. savingThrowFromTraits .. " Total Bonus Saving Throw: " .. bonusSavingThrow)
+    end
+
+    -- ---------------------- Saving Throw From First Aid Skill ----------------------
+    local firstAidLevel = player:getPerkLevel(Perks.Doctor)
+    if firstAidLevel >= 6 then
+        bonusSavingThrow = bonusSavingThrow + firstAidLevel - 5
+        -- print("First Aid Level: " .. firstAidLevel .. " - Saving Throw: " .. bonusSavingThrow)
+    end
+
+    -- print("Final Saving Throw: " .. bonusSavingThrow)
+    return bonusSavingThrow
+end
+
 local function checkUntreatedBiteWounds() -- check if player has untreated bite wounds
     local bodyDamage = player:getBodyDamage()
     local bodyParts = bodyDamage:getBodyParts()
@@ -47,7 +100,6 @@ local function checkUntreatedBiteWounds() -- check if player has untreated bite 
     end
     return false -- no untreated bite wounds found
 end
-Events.EveryOneMinute.Add(checkUntreatedBiteWounds)
 
 local function PrintStatus() -- Purely for debug purposes, will be removed in the future
     print("Infection Start Time: " .. tostring(modData.ICdata.infectionStartedTime))
@@ -64,16 +116,9 @@ local function PrintStatus() -- Purely for debug purposes, will be removed in th
     if checkUntreatedBiteWounds() then
         print("Player has untreated bite wound(s)!")
     end
-end
 
-local function DidPlayerSurvive(infected)
-    if infected == false then
-        print("You'll be fine")
-    else
-        print("You dead son")
-    end
+    print("Current Bonus Saving Throw: " .. calculateBonusSavingThrow())
 end
-    
 
 Events.EveryOneMinute.Add(CheckForInfection)
 Events.EveryTenMinutes.Add(PrintStatus)
