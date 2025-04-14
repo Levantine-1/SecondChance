@@ -86,6 +86,27 @@ local function calculateBonusSavingThrow() -- Calculate the player's bonus savin
     return bonusSavingThrow
 end
 
+local function calculateDifficultyClass()
+    local difficultyClass = 16 -- Base DC for infection check 20% chance to save yourself by default at 0 minutes after bite
+
+    infectionStartedTime = modData.ICdata.infectionStartedTime
+    if infectionStartedTime == nil then
+        return difficultyClass
+    end
+
+    local currentTime = getGameTime():getWorldAgeHours()
+    local elapsedInfectionTimeMinutes = math.floor((currentTime - modData.ICdata.infectionStartedTime) * 60)
+
+    if elapsedInfectionTimeMinutes > 60 then
+        difficultyClass = 0 -- If you've been infected for longer than an hour, you're screwed and there is no possible way to save yourself, not even d20
+    elseif elapsedInfectionTimeMinutes <= 60 then
+        local bonusDifficultyPoints = math.ceil(elapsedInfectionTimeMinutes / 3) -- 1 point of DC for every 3 minutes of infection time
+        difficultyClass = difficultyClass + bonusDifficultyPoints
+    end
+
+    return difficultyClass
+end
+
 local function checkUntreatedBiteWounds() -- check if player has untreated bite wounds
     local bodyDamage = player:getBodyDamage()
     local bodyParts = bodyDamage:getBodyParts()
@@ -118,6 +139,7 @@ local function PrintStatus() -- Purely for debug purposes, will be removed in th
     end
 
     print("Current Bonus Saving Throw: " .. calculateBonusSavingThrow())
+    print("Current Difficulty Class: " .. calculateDifficultyClass())
 end
 
 Events.EveryOneMinute.Add(CheckForInfection)
