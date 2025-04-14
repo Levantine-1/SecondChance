@@ -33,7 +33,23 @@ local function CheckForInfection()
     end
 end
 
-local function PrintStatus()
+local function checkUntreatedBiteWounds() -- check if player has untreated bite wounds
+    local bodyDamage = player:getBodyDamage()
+    local bodyParts = bodyDamage:getBodyParts()
+    for i = 0, bodyParts:size() - 1 do
+        local bodyPart = bodyParts:get(i)
+        -- print("Checking body part: " .. BodyPartType.getDisplayName(bodyPart:getType()))
+        -- Check for infected wounds that are not disinfected. Poutices won't help here, only modern medicine will do
+        if bodyPart:bitten() and bodyPart:getAlcoholLevel() < 1 then
+            -- print("Untreated bite wound found on body part: " .. BodyPartType.getDisplayName(bodyPart:getType()))
+            return true
+        end
+    end
+    return false -- no untreated bite wounds found
+end
+Events.EveryOneMinute.Add(checkUntreatedBiteWounds)
+
+local function PrintStatus() -- Purely for debug purposes, will be removed in the future
     print("Infection Start Time: " .. tostring(modData.ICdata.infectionStartedTime))
     local currentTime = getGameTime():getWorldAgeHours()
     print("Current Time: " .. currentTime)
@@ -43,6 +59,10 @@ local function PrintStatus()
             local elapsedInfectionTime = (currentTime - modData.ICdata.infectionStartedTime) * 60
             print("Time Since Infection: " .. math.floor(elapsedInfectionTime) .. " minutes")
         end
+    end
+
+    if checkUntreatedBiteWounds() then
+        print("Player has untreated bite wound(s)!")
     end
 end
 
