@@ -1,4 +1,3 @@
-print("LEVANTINE MOD LOADED")
 local player
 local function LoadPlayerData()
 	player = getPlayer()
@@ -10,6 +9,7 @@ local function LoadPlayerData()
 end
 Events.OnGameStart.Add(LoadPlayerData)
 
+
 local function ResetInfectionData()
     if player then
         player = getPlayer() -- Reinitialize player variable
@@ -20,6 +20,7 @@ local function ResetInfectionData()
     end
 end
 Events.OnCreatePlayer.Add(ResetInfectionData) -- Reset infection data when a new character is created in the event of a respawn
+
 
 local function calculateBonusSavingThrow() -- Calculate the player's bonus saving throw based on their occupation and traits and first aid skill
     local bonusSavingThrow = 0
@@ -63,6 +64,20 @@ local function calculateBonusSavingThrow() -- Calculate the player's bonus savin
         -- print("Saving Throw from Traits: " .. savingThrowFromTraits .. " Total Bonus Saving Throw: " .. bonusSavingThrow)
     end
 
+    -- 2025-14-04 For now debuffs don't work because the traits are not well documented and I'm too lazy to figure it out right now
+        -- -- ---------------------- Debuff From Traits ----------------------
+        -- local relatedDebuffTraits = {"Emaciated", "SlowHealer", "ThinSkinned", "ProneToIllness"}
+        -- local traits = player:getTraits()
+        -- -- maxSavingThrowDebuffsFromTraits = 3 -- No limit to debuffs
+        -- for i = 0, traits:size() - 1 do
+        --     for _, relatedDebuffTrait in ipairs(relatedDebuffTraits) do
+        --         if traits:get(i) == relatedDebuffTrait then
+        --             savingThrowFromTraits = savingThrowFromTraits - 1
+        --             -- print("Trait: " .. relatedTrait .. " subracts 1 saving throw)
+        --         end
+        --     end
+        -- end
+
     -- ---------------------- Saving Throw From First Aid Skill ----------------------
     local firstAidLevel = player:getPerkLevel(Perks.Doctor)
     if firstAidLevel >= 6 then
@@ -73,6 +88,7 @@ local function calculateBonusSavingThrow() -- Calculate the player's bonus savin
     -- print("Final Saving Throw: " .. bonusSavingThrow)
     return bonusSavingThrow
 end
+
 
 local function calculateDifficultyClass()
     local difficultyClass = 16 -- Base DC for infection check 20% chance to save yourself by default at 0 minutes after bite
@@ -95,6 +111,7 @@ local function calculateDifficultyClass()
     return difficultyClass
 end
 
+
 local function checkUntreatedBiteWounds() -- check if player has untreated bite wounds
     local bodyDamage = player:getBodyDamage()
     local bodyParts = bodyDamage:getBodyParts()
@@ -109,7 +126,6 @@ local function checkUntreatedBiteWounds() -- check if player has untreated bite 
     end
     return false -- no untreated bite wounds found
 end
-
 
 
 local advantagedRoll = false
@@ -146,6 +162,7 @@ local function checkDoesPlayerSurvive()
     end
 end
 
+
 local function playerWillDie()
     print("Player has failed the infection check!")
     modData.ICdata.failedSavingThrow = true
@@ -178,6 +195,7 @@ local function playerWillSurvive()
     modData.ICdata.infectionVector = nil
     print("Player has survived the infection check!")
 end
+
 
 local function CheckForInfection()
     if not player:getBodyDamage():IsInfected() and modData.ICdata.infectionStartedTime ~= nil then
@@ -213,6 +231,7 @@ local function CheckForInfection()
     end
 end
 
+
 local function PrintStatus() -- Purely for debug purposes, will be removed in the future
     print("Infection Start Time: " .. tostring(modData.ICdata.infectionStartedTime))
     local currentTime = getGameTime():getWorldAgeHours()
@@ -233,7 +252,7 @@ local function PrintStatus() -- Purely for debug purposes, will be removed in th
     print("Current Difficulty Class: " .. calculateDifficultyClass())
     print("Failed Saving Throw Status: " .. tostring(modData.ICdata.failedSavingThrow))
 end
+-- Events.EveryTenMinutes.Add(PrintStatus) -- Uncomment this line to print status every 10 minutes for debugging
+
 
 Events.EveryOneMinute.Add(CheckForInfection)
-Events.EveryTenMinutes.Add(PrintStatus)
-
