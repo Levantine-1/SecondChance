@@ -74,15 +74,6 @@ This mod uses Dungeons and Dragons (D&D) style dice rolls to determine if player
 
 ---
 
-## Installation
-
-1. Download the mod files and place them in your `Zomboid/Workshop` directory.
-2. Enable the mod in the Project Zomboid Mods menu.
-3. Start a new game or load an existing save to experience the infection survival mechanics.
-
----
-
-
 ## Future Plans
 
 - Add support for debuff traits (e.g., `ThinSkinned`, `ProneToIllness`).
