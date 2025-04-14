@@ -140,12 +140,13 @@ local function checkDoesPlayerSurvive()
     local d20 = ZombRand(1, 20) -- Roll a d20
 
     local totalRoll = d20 + bonusSavingThrows
-    print("Rolled a " .. d20 .. " + " .. bonusSavingThrows .. " = " .. totalRoll .. " vs DC: " .. currentDCcheck)
 
     if advantagedRoll and (totalRoll < currentDCcheck) then -- If the player has advantage and the first roll fails, roll again
         local d20Adv = ZombRand(1, 20) -- Roll a d20 with advantage
         totalRoll = d20Adv + bonusSavingThrows
     end
+
+    print("Rolled a " .. d20 .. " + " .. bonusSavingThrows .. " = " .. totalRoll .. " vs DC: " .. currentDCcheck)
 
     if (totalRoll >= currentDCcheck) or (d20 == 20) then -- Player has succeeded the saving throw, or rolled a natural 20
         if d20 == 20 then
