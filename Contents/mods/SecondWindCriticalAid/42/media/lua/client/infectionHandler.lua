@@ -171,6 +171,7 @@ local function playerWillSurvive()
     bodyDamage:setInfectionLevel(0.0) -- Reset infection level
     bodyDamage:setInfectionTime(-1.0) -- Reset infection time
     bodyDamage:setInfectionMortalityDuration(-1.0) -- Reset mortality duration
+    bodyDamage:setIsFakeInfected(true) -- Make the player squrim
 
     -- Clear mod data
     modData.ICdata.infectionStartedTime = nil
