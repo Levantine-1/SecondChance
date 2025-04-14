@@ -27,11 +27,11 @@ local function calculateBonusSavingThrow() -- Calculate the player's bonus savin
     -- ---------------------- Saving Throw From Occupation ----------------------
     local occupation = player:getDescriptor():getProfession()
     if occupation == "doctor" then
-        bonusSavingThrowingThrow = bonusSavingThrow + 5
+        bonusSavingThrow = bonusSavingThrow + 5
         -- print("Occupation: Doctor - Saving Throw: " .. bonusSavingThrow)
     end
     if occupation == "nurse" then
-        bonusSavingThrow = bonusSavingThrow + 2
+        bonusSavingThrow = bonusSavingThrow + 3
         -- print("Occupation: Nurse - Saving Throw: " .. bonusSavingThrow)
     end
     local relatedOccupations = {"policeofficer", "fireofficer", "parkranger", "veteran", "securityguard"}
@@ -131,8 +131,18 @@ local function checkDoesPlayerSurvive()
         totalRoll = d20Adv + bonusSavingThrows
     end
 
-    if (totalRoll >= currentDCcheck) or (d20 == 20) then
-        return true
+    if (totalRoll >= currentDCcheck) or (d20 == 20) then -- Player has succeeded the saving throw, or rolled a natural 20
+        if d20 == 20 then
+            local stats = player:getStats()
+            stats:setFatigue(0.0)                   -- Resets fatigue
+            stats:setEndurance(1.0)                 -- Resets endurance
+        end
+        return true -- Player has succeeded the saving throw
+    else
+        if d20 == 1 then
+            player:setOnFire(true)
+        end
+        return false -- Player has failed the saving throw, but not a critical failure
     end
 end
 
@@ -141,20 +151,6 @@ local function playerWillDie()
     modData.ICdata.failedSavingThrow = true
 end
 
--- local function playerWillSurvive()
---     -- player:getBodyDamage():setInfected(false) -- Remove real infection status
---     -- player:getBodyDamage():setFakeInfected(true) -- Set Fake infection to scare the player
---     print("Player has survived the infection check!")
---     local bodyDamage = player:getBodyDamage()
---     local bodyParts = bodyDamage:getBodyParts()
---     for i = 0, bodyParts:size() - 1 do
---         local bodyPart = bodyParts:get(i)
---         bodyPart:SetInfected(false) -- Remove real infection status
---         bodyPart:SetFakeInfected(true) -- Set Fake infection to scare the player
---     end
---     modData.ICdata.infectionStartedTime = nil
---     modData.ICdata.infectionVector = nil
--- end
 
 local function playerWillSurvive()
     local bodyDamage = player:getBodyDamage()
@@ -183,10 +179,26 @@ local function playerWillSurvive()
 end
 
 local function CheckForInfection()
+    if not player:getBodyDamage():IsInfected() and modData.ICdata.infectionStartedTime ~= nil then
+        print("Somehow the player is no longer infected, resetting infection start time")
+        ResetInfectionData()
+    end
+
     if modData.ICdata.failedSavingThrow == true then
         return -- Player has already failed the saving throw, no need to check again, they will die
     end
 
+    if player:getBodyDamage():IsInfected() and modData.ICdata.infectionStartedTime == nil then -- player first becomes infected
+        local currentTime = getGameTime():getWorldAgeHours()
+        if checkUntreatedBiteWounds() then
+            modData.ICdata.infectionVector = "bite"
+            print("Player has been bitten!")
+        end
+        print("Player is infected! Infection began at: " .. currentTime)
+        modData.ICdata.infectionStartedTime = currentTime
+    end
+
+    -- Monitor infection status every minute until player treats the infection
     if player:getBodyDamage():IsInfected() and modData.ICdata.infectionStartedTime ~= nil and modData.ICdata.infectionVector == "bite" then
         if checkUntreatedBiteWounds() then
             return -- player is still has untreated bite wounds, do nothing
@@ -197,19 +209,6 @@ local function CheckForInfection()
                 playerWillDie()
             end
         end
-
-    elseif player:getBodyDamage():IsInfected() and modData.ICdata.infectionStartedTime == nil then
-        local currentTime = getGameTime():getWorldAgeHours()
-        if checkUntreatedBiteWounds() then
-            modData.ICdata.infectionVector = "bite"
-            print("Player has been bitten!")
-        end
-        print("Player is infected! Infection began at: " .. currentTime)
-        modData.ICdata.infectionStartedTime = currentTime
-
-    elseif not player:getBodyDamage():IsInfected() and modData.ICdata.infectionStartedTime ~= nil then
-        print("Somehow the player is no longer infected, resetting infection start time")
-        modData.ICdata.infectionStartedTime = nil
     end
 end
 
