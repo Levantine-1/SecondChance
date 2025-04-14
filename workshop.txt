@@ -1,12 +1,9 @@
 version=1
-id=
+id=3464120986
 title=Second Wind Critical Aid
 description=Second Wind: Critical Aid aims to make medical occupations and first aid more useful and gives players a chance to survive zombie bite infections through saving throws, influenced by their traits, skills, occupations, and actions. When bites are 100% guaranteed death, most players opt for bleach which is very anticlimatic and
-
 description=players would rarely see the effects of the infection. This mod adds depth to the infection system, making it more engaging and rewarding for players who prepare and act quickly while also adding the tension of wondering if you will survive.
-
 description=
-
 description=This mod uses Dungeons and Dragons (D&D) style dice rolls to determine if players will live or die.
 description=Visit https://github.com/Levantine-1/SecondWindCriticalAid for more details
 tags=Build 42;Balance;Hardmode;Realistic;Silly/Fun;QoL
