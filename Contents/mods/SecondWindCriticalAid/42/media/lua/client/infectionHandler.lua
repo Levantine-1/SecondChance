@@ -144,8 +144,7 @@ local function checkDoesPlayerSurvive()
 
     bonusSavingThrows = calculateBonusSavingThrow()
 
-    -- local d20 = ZombRand(1, 21) -- Roll a d20
-    local d20 = 20
+    local d20 = ZombRand(1, 21) -- Roll a d20
 
     local totalRoll = d20 + bonusSavingThrows
 
