@@ -6,6 +6,10 @@ players would rarely see the effects of the infection. This mod adds depth to th
 This mod uses Dungeons and Dragons (D&D) style dice rolls to determine if players will live or die.
 
 ---
+## TL;DR How to survive
+When you are bitten, disinfect the wound with something like a bottle of disinfectant or alchohol swabs, or alchohol soaked cotton balls, or whatever else the game considers a disinfectant, but those are the 3 items I know should work. Poutices wont work.
+
+The sooner you do this, the more likely you are to survive the bite. Every second counts.
 
 ## How It Works
 

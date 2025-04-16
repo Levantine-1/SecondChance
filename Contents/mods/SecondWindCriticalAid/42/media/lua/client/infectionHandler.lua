@@ -80,10 +80,16 @@ local function calculateBonusSavingThrow() -- Calculate the player's bonus savin
 
     -- ---------------------- Saving Throw From First Aid Skill ----------------------
     local firstAidLevel = player:getPerkLevel(Perks.Doctor)
-    if firstAidLevel >= 6 then
-        bonusSavingThrow = bonusSavingThrow + firstAidLevel - 5
+    -- local firstAidGainSavingThrowLevelStartAt = 6
+    local firstAidGainSavingThrowLevelStartAt = SandboxVars.SecondWind.firstAidGainSavingThrowLevelStartAt
+    if firstAidLevel >= firstAidGainSavingThrowLevelStartAt then
+        savingThrowFromFirstAidPerk = firstAidLevel - firstAidGainSavingThrowLevelStartAt + 1 -- +1 for the first level of First Aid
+        bonusSavingThrow = bonusSavingThrow + savingThrowFromFirstAidPerk
         -- print("First Aid Level: " .. firstAidLevel .. " - Saving Throw: " .. bonusSavingThrow)
     end
+
+    -- ---------------------- Saving Throw From Bonus Saving Throws from Sandbox Options ----------------------
+    bonusSavingThrow = bonusSavingThrow + SandboxVars.SecondWind.baseBonusSavingThrows
 
     -- print("Final Saving Throw: " .. bonusSavingThrow)
     return bonusSavingThrow
@@ -91,7 +97,8 @@ end
 
 
 local function calculateDifficultyClass()
-    local difficultyClass = 16 -- Base DC for infection check 20% chance to save yourself by default at 0 minutes after bite
+    -- local difficultyClass = 16 -- Base DC for infection check 20% chance to save yourself by default at 0 minutes after bite
+    local difficultyClass = SandboxVars.SecondWind.baseDifficultyClass -- Base DC for infection check from sandbox options
 
     infectionStartedTime = modData.ICdata.infectionStartedTime
     if infectionStartedTime == nil then
@@ -128,7 +135,7 @@ local function checkUntreatedBiteWounds() -- check if player has untreated bite 
 end
 
 
-local advantagedRoll = false
+local advantagedRoll = SandboxVars.SecondWind.advantagedRoll
 local function checkDoesPlayerSurvive()
     currentDCcheck = calculateDifficultyClass()
     if currentDCcheck == 0 then
@@ -137,7 +144,8 @@ local function checkDoesPlayerSurvive()
 
     bonusSavingThrows = calculateBonusSavingThrow()
 
-    local d20 = ZombRand(1, 20) -- Roll a d20
+    -- local d20 = ZombRand(1, 21) -- Roll a d20
+    local d20 = 20
 
     local totalRoll = d20 + bonusSavingThrows
 
@@ -147,16 +155,17 @@ local function checkDoesPlayerSurvive()
     end
 
     print("Rolled a " .. d20 .. " + " .. bonusSavingThrows .. " = " .. totalRoll .. " vs DC: " .. currentDCcheck)
-
-    if (totalRoll >= currentDCcheck) or (d20 == 20) then -- Player has succeeded the saving throw, or rolled a natural 20
-        if d20 == 20 then
+    if (d20 == 20) or (totalRoll >= currentDCcheck) then -- Player has succeeded the saving throw, or rolled a natural 20
+        if d20 == 20 and SandboxVars.SecondWind.criticalRolls then
+            print("Critical Success! Player is long rested!")
             local stats = player:getStats()
             stats:setFatigue(0.0)                   -- Resets fatigue
             stats:setEndurance(1.0)                 -- Resets endurance
         end
         return true -- Player has succeeded the saving throw
     else
-        if d20 == 1 then
+        if d20 == 1 and SandboxVars.SecondWind.criticalRolls then
+            print("Critical Failure! Player is set on fire!")
             player:setOnFire(true)
         end
         return false -- Player has failed the saving throw, but not a critical failure
