@@ -33,7 +33,7 @@ option SecondChance.firstAidGainSavingThrowLevelStartAt
 option SecondChance.criticalRolls
 {
 	type = boolean,
-	default = true,
+	default = false,
 	page = SecondChance,
 	translation = SecondChanceCriticalRolls,
 }

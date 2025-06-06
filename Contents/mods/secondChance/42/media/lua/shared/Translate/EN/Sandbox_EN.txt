@@ -11,7 +11,7 @@ Sandbox_EN = {
 	Sandbox_SecondChancefirstAidGainSavingThrowLevelStartAt_tooltip = "Gain 1 bonus saving throw per first aid level starting at this level",
 
 	Sandbox_SecondChanceCriticalRolls = "Critical Rolls",
-	Sandbox_SecondChanceCriticalRolls_tooltip = "In D&D, rolling the dice and getting a 1 or 20 have some special rules in addition to being auto fail or pass. In this case, Nat1 = you character bursts into flames from spilling alcohol, Nat20 resests endrance and fatigue as a bonus.",
+	Sandbox_SecondChanceCriticalRolls_tooltip = "Just for fun, in D&D, rolling the dice and getting a 1 or 20 have some special rules in addition to being auto fail or pass. In this case, Nat1 = you character bursts into flames from spilling alcohol, Nat20 resests endrance and fatigue as a bonus.",
 
 	Sandbox_SecondChanceAdvantagedRoll = "Advantaged Roll",
 	Sandbox_SecondChanceAdvantagedRoll_tooltip = "Roll the d20 die twice and pick the higher number.",
