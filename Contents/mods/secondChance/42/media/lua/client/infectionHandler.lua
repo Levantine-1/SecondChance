@@ -81,7 +81,7 @@ local function calculateBonusSavingThrow() -- Calculate the player's bonus savin
     -- ---------------------- Saving Throw From First Aid Skill ----------------------
     local firstAidLevel = player:getPerkLevel(Perks.Doctor)
     -- local firstAidGainSavingThrowLevelStartAt = 6
-    local firstAidGainSavingThrowLevelStartAt = SandboxVars.SecondWind.firstAidGainSavingThrowLevelStartAt
+    local firstAidGainSavingThrowLevelStartAt = SandboxVars.SecondChance.firstAidGainSavingThrowLevelStartAt
     if firstAidLevel >= firstAidGainSavingThrowLevelStartAt then
         savingThrowFromFirstAidPerk = firstAidLevel - firstAidGainSavingThrowLevelStartAt + 1 -- +1 for the first level of First Aid
         bonusSavingThrow = bonusSavingThrow + savingThrowFromFirstAidPerk
@@ -89,7 +89,7 @@ local function calculateBonusSavingThrow() -- Calculate the player's bonus savin
     end
 
     -- ---------------------- Saving Throw From Bonus Saving Throws from Sandbox Options ----------------------
-    bonusSavingThrow = bonusSavingThrow + SandboxVars.SecondWind.baseBonusSavingThrows
+    bonusSavingThrow = bonusSavingThrow + SandboxVars.SecondChance.baseBonusSavingThrows
 
     -- print("Final Saving Throw: " .. bonusSavingThrow)
     return bonusSavingThrow
@@ -98,7 +98,7 @@ end
 
 local function calculateDifficultyClass()
     -- local difficultyClass = 16 -- Base DC for infection check 20% chance to save yourself by default at 0 minutes after bite
-    local difficultyClass = SandboxVars.SecondWind.baseDifficultyClass -- Base DC for infection check from sandbox options
+    local difficultyClass = SandboxVars.SecondChance.baseDifficultyClass -- Base DC for infection check from sandbox options
 
     infectionStartedTime = modData.ICdata.infectionStartedTime
     if infectionStartedTime == nil then
@@ -135,7 +135,7 @@ local function checkUntreatedBiteWounds() -- check if player has untreated bite 
 end
 
 
-local advantagedRoll = SandboxVars.SecondWind.advantagedRoll
+local advantagedRoll = SandboxVars.SecondChance.advantagedRoll
 local function checkDoesPlayerSurvive()
     currentDCcheck = calculateDifficultyClass()
     if currentDCcheck == 0 then
@@ -149,13 +149,16 @@ local function checkDoesPlayerSurvive()
     local totalRoll = d20 + bonusSavingThrows
 
     if advantagedRoll and (totalRoll < currentDCcheck) then -- If the player has advantage and the first roll fails, roll again
+        -- NOTE: 2025-04-22: There is a bug here where the player can roll a 20 on the first roll and then roll again with advantage
+        -- and get a lower roll.
+        -- TODO: Fix this bug by checking if the first roll is a 20 and not rolling again if it is
         local d20Adv = ZombRand(1, 20) -- Roll a d20 with advantage
         totalRoll = d20Adv + bonusSavingThrows
     end
 
     print("Rolled a " .. d20 .. " + " .. bonusSavingThrows .. " = " .. totalRoll .. " vs DC: " .. currentDCcheck)
     if (d20 == 20) or (totalRoll >= currentDCcheck) then -- Player has succeeded the saving throw, or rolled a natural 20
-        if d20 == 20 and SandboxVars.SecondWind.criticalRolls then
+        if d20 == 20 and SandboxVars.SecondChance.criticalRolls then
             print("Critical Success! Player is long rested!")
             local stats = player:getStats()
             stats:setFatigue(0.0)                   -- Resets fatigue
@@ -163,7 +166,7 @@ local function checkDoesPlayerSurvive()
         end
         return true -- Player has succeeded the saving throw
     else
-        if d20 == 1 and SandboxVars.SecondWind.criticalRolls then
+        if d20 == 1 and SandboxVars.SecondChance.criticalRolls then
             print("Critical Failure! Player is set on fire!")
             player:setOnFire(true)
         end

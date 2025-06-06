@@ -1,6 +1,6 @@
-# Second Wind: Critical Aid
+# Second Chance: Survive Zombie Bites with Prompt First Aid
 
-Second Wind: Critical Aid aims to make medical occupations and first aid more useful, and gives players a chance to survive zombie bite infections through saving throws, influenced by their traits, skills, occupations, and actions. When bites are 100% guaranteed death, most players opt for bleach which is very anticlimatic and
+Second Chance: Survive Zombie Bites with Prompt First Aid aims to make medical occupations and first aid more useful, and gives players a chance to survive zombie bite infections through saving throws, influenced by their traits, skills, occupations, and actions. When bites are 100% guaranteed death, most players opt for bleach which is very anticlimatic and
 players would rarely see the effects of the infection. This mod adds depth to the infection system, making it more engaging and rewarding for players who prepare and act quickly while also adding the tension of wondering if you will survive.
 
 This mod uses Dungeons and Dragons (D&D) style dice rolls to determine if players will live or die.

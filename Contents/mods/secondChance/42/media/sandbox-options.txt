@@ -1,0 +1,55 @@
+VERSION = 1,
+
+option SecondChance.baseDifficultyClass
+{
+	type = integer,
+	min = 1,
+	max = 30,
+	default = 16,
+	page = SecondChance,
+	translation = SecondChanceBaseDifficultyClass,
+}
+
+option SecondChance.baseBonusSavingThrows
+{
+	type = integer,
+	min = -30,
+	max = 30,
+	default = 0,
+	page = SecondChance,
+	translation = SecondChanceBaseBonusSavingThrows,
+}
+
+option SecondChance.firstAidGainSavingThrowLevelStartAt
+{
+	type = integer,
+	min = 1,
+	max = 10,
+	default = 6,
+	page = SecondChance,
+	translation = SecondChancefirstAidGainSavingThrowLevelStartAt,
+}
+
+option SecondChance.criticalRolls
+{
+	type = boolean,
+	default = true,
+	page = SecondChance,
+	translation = SecondChanceCriticalRolls,
+}
+
+option SecondChance.advantagedRoll
+{
+	type = boolean,
+	default = false,
+	page = SecondChance,
+	translation = SecondChanceAdvantagedRoll,
+}
+
+option SecondChance.Note
+{
+	type = boolean,
+	default = false,
+	page = SecondChance,
+	translation = SecondChanceNote,
+}
