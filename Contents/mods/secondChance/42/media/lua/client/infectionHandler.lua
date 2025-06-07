@@ -135,7 +135,6 @@ local function checkUntreatedBiteWounds() -- check if player has untreated bite 
 end
 
 
-local advantagedRoll = SandboxVars.SecondChance.advantagedRoll
 local function checkDoesPlayerSurvive()
     currentDCcheck = calculateDifficultyClass()
     if currentDCcheck == 0 then
@@ -144,31 +143,38 @@ local function checkDoesPlayerSurvive()
 
     bonusSavingThrows = calculateBonusSavingThrow()
 
+    local nat20 = false
+    local nat1 = false
     local d20 = ZombRand(1, 21) -- Roll a d20
+    if d20 == 20 then
+        nat20 = true -- Player rolled a natural 20
+    elseif d20 == 1 then
+        nat1 = true -- Player rolled a natural 1
+    end
 
     local totalRoll = d20 + bonusSavingThrows
 
-    if advantagedRoll and (totalRoll < currentDCcheck) then -- If the player has advantage and the first roll fails, roll again
-        -- NOTE: 2025-04-22: There is a bug here where the player can roll a 20 on the first roll and then roll again with advantage
-        -- and get a lower roll.
-        -- TODO: Fix this bug by checking if the first roll is a 20 and not rolling again if it is
+    if SandboxVars.SecondChance.advantagedRoll and (totalRoll < currentDCcheck) and not nat20 then -- If the player has advantage and the first roll fails, roll again
+        print("Player failed DC " .. currentDCcheck .. " with roll + bonus totaling " .. totalRoll .. ". Rolling again with advantage...")
         local d20Adv = ZombRand(1, 20) -- Roll a d20 with advantage
         totalRoll = d20Adv + bonusSavingThrows
     end
 
     print("Rolled a " .. d20 .. " + " .. bonusSavingThrows .. " = " .. totalRoll .. " vs DC: " .. currentDCcheck)
-    if (d20 == 20) or (totalRoll >= currentDCcheck) then -- Player has succeeded the saving throw, or rolled a natural 20
-        if d20 == 20 and SandboxVars.SecondChance.criticalRolls then
+    stats = player:getStats()
+    if nat20 or (totalRoll >= currentDCcheck) then -- Player has succeeded the saving throw, or rolled a natural 20
+        if nat20 and SandboxVars.SecondChance.criticalRolls then
             print("Critical Success! Player is long rested!")
-            local stats = player:getStats()
             stats:setFatigue(0.0)                   -- Resets fatigue
             stats:setEndurance(1.0)                 -- Resets endurance
         end
         return true -- Player has succeeded the saving throw
     else
-        if d20 == 1 and SandboxVars.SecondChance.criticalRolls then
-            print("Critical Failure! Player is set on fire!")
-            player:setOnFire(true)
+        if nat1 and SandboxVars.SecondChance.criticalRolls then
+            print("Critical Failure! Player gets extra consequences!")
+            stats:setStress(1.0)      -- Max stress
+            stats:setPanic(100.0)       -- Max panic
+            stats:setDrunkenness(100.0) -- Max drunkenness
         end
         return false -- Player has failed the saving throw, but not a critical failure
     end
