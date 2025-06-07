@@ -2,20 +2,20 @@ Sandbox_EN = {
 	Sandbox_SecondChance = "Second Chance",
 
 	Sandbox_SecondChanceBaseDifficultyClass = "Difficulty Class",
-	Sandbox_SecondChanceBaseDifficultyClass_tooltip = "A number you must roll a d20 and get a result + bonuses higher than the DC to pass. 16 is 20% base survival rate, lower is easier.",
+	Sandbox_SecondChanceBaseDifficultyClass_tooltip = "The amount of points player needs to roll to survive. Each point is ~5% difficulty increase. At 0 bonus, 0 minutes after bite, DC10 is 50% and DC16 is 20% survival rate",
 
 	Sandbox_SecondChanceBaseBonusSavingThrows = "Extra Bonus Saving Throws",
-	Sandbox_SecondChanceBaseBonusSavingThrows_tooltip = "Add extra saving throws to the d20 roll result to increase likelihood of survival",
+	Sandbox_SecondChanceBaseBonusSavingThrows_tooltip = "Add extra saving throws to the d20 roll result to increase likelihood of survival, each point is an extra ~5% chance",
 
 	Sandbox_SecondChancefirstAidGainSavingThrowLevelStartAt = "First Aid Bonus Starts At Level",
 	Sandbox_SecondChancefirstAidGainSavingThrowLevelStartAt_tooltip = "Gain 1 bonus saving throw per first aid level starting at this level",
 
 	Sandbox_SecondChanceCriticalRolls = "Critical Rolls",
-	Sandbox_SecondChanceCriticalRolls_tooltip = "Just for fun, in D&D, rolling the dice and getting a 1 or 20 have some special rules in addition to being auto fail or pass. In this case, Nat1 = you character bursts into flames from spilling alcohol, Nat20 resests endrance and fatigue as a bonus.",
+	Sandbox_SecondChanceCriticalRolls_tooltip = "Just for fun, in D&D, rolling the dice and getting a 1 or 20 have some special rules in addition to being auto fail or pass. In this case, Nat1 = Your character becomes a sad drunk, Nat20 resests endrance and fatigue as a bonus.",
 
 	Sandbox_SecondChanceAdvantagedRoll = "Advantaged Roll",
 	Sandbox_SecondChanceAdvantagedRoll_tooltip = "Roll the d20 die twice and pick the higher number.",
 
 	Sandbox_SecondChanceNote = "NOTE: Restart to apply changes!",
-	Sandbox_SecondChanceNote_tooltip = "",
+	Sandbox_SecondChanceNote_tooltip = "Sandbox options aren't meant to be changed dynamically while playing the game, just quit and reload this save.",
 }
