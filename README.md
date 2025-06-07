@@ -33,10 +33,13 @@ The sooner you do this, the more likely you are to survive the bite. Every secon
 
 4. **Critical Rolls**:
    - In D&D fashion with critical rolls:
-    - Rolling a natural 20 restores endurance and fatigue as a bonus.
-    - Rolling a natural 1 player is set on fire from the spilled alcohol
+   - Rolling a natural 20 restores endurance and fatigue as a bonus.
+   - Rolling a natural 1 player becomes stressed, unhappy and drunk.
 
-5. **Infection Resolution**:
+5. **Advantaged Rolls**:
+   - Roll the die twice, and pick the higher number. If the lucky trait were stille around I would have tied this to that, but for now it's just going to be a sandbox
+
+6. **Infection Resolution**:
    - If the player succeeds the saving throw, the infection is cured, and all infection-related data is reset.
    - If the player fails, they are marked for death.
 
